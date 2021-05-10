@@ -99,18 +99,12 @@ class Addclient extends Component {
 
                     <Form.Group>
                         <Form.Label>Sellect client</Form.Label>
-                        <Form.Control as="select" name="client_id">
-                            <option value="Orange">Orange</option>
-                            <option value="Radish">Radish</option>
-                            <option value="Cherry">Cherry</option>
+                        <Form.Control as="select" name="client_id" onChange={this.handleChange}>
+                            {client.map((client) => (
+                                <option key={client.id} value={client.id}>{client.name}</option>
+                            ))}
                         </Form.Control>
                     </Form.Group>
-                    {/* <label htmlFor="client_id">client</label>
-                    <select name="client_id" id="client">
-                        {client.map((client) => (
-                            <option key={client.id} value={client.id}>{client.name}</option>
-                        ))}
-                    </select> */}
                     <Form.Group >
                         <Form.Label>When job starts</Form.Label>
                         <Form.Control type="date" name='start' placeholder="start" onChange={this.handleChange} />
