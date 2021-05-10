@@ -1,0 +1,146 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import axios from '../../axios';
+import { Form, Button } from 'react-bootstrap';
+import { setCurentClientName, setCurentClientId, } from '../../redux/clients/client.actions';
+import Cookies from 'universal-cookie';
+
+class Addclient extends Component {
+    // axios
+    componentDidMount() {
+        const cookies = new Cookies();
+        const token = cookies.get('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        };
+
+        axios.get(
+            '/allclients',
+            config
+        )
+            .then(res => {
+                res.data.forEach(element => {
+                    this.props.setCurentClientName(
+                        element.name
+                    )
+                    this.props.setCurentClientId(
+                        element.id
+                    )
+                    // this.props.setCurentClient(currentClient => ({
+                    //     array: [...currentClient.array, element.name]
+                    // }))
+
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+    handleChange = event => {
+        this.setState({ [event.target.name]: event.target.value });
+    }
+
+    handleSubmit = event => {
+        const cookies = new Cookies();
+        const token = cookies.get('token');
+        event.preventDefault();
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        };
+
+        const bodyParameters = {
+            address: this.state.address,
+            client_id: this.state.client_id,
+            description: this.state.description,
+            start: this.state.start,
+            finish: this.state.finish,
+        };
+
+        axios.post(
+            '/job',
+            bodyParameters,
+            config
+        )
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+    render() {
+        //const client = [this.props.currentClientName, this.props.currentClientId]
+        const client = [];
+        for (let i = 0; i < this.props.currentClientName.length; i++) {
+            client.push({
+                name: this.props.currentClientName[i],
+                id: this.props.currentClientId[i]
+            });
+        };
+        console.log(client)
+        return (
+            <div className='center_form'>
+                <Form className='login_form' onSubmit={this.handleSubmit}>
+                    <Form.Group >
+                        <Form.Label>New job</Form.Label>
+                        <Form.Control type="text" name='address' placeholder="address" onChange={this.handleChange} />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Control type="text" name='description' placeholder="description" onChange={this.handleChange} />
+                    </Form.Group>
+
+                    <Form.Group>
+                        <Form.Label>Sellect client</Form.Label>
+                        <Form.Control as="select" name="client_id">
+                            <option value="Orange">Orange</option>
+                            <option value="Radish">Radish</option>
+                            <option value="Cherry">Cherry</option>
+                        </Form.Control>
+                    </Form.Group>
+                    {/* <label htmlFor="client_id">client</label>
+                    <select name="client_id" id="client">
+                        {client.map((client) => (
+                            <option key={client.id} value={client.id}>{client.name}</option>
+                        ))}
+                    </select> */}
+                    <Form.Group >
+                        <Form.Label>When job starts</Form.Label>
+                        <Form.Control type="date" name='start' placeholder="start" onChange={this.handleChange} />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>When job ends</Form.Label>
+                        <Form.Control type="date" name='finish' placeholder="finish" onChange={this.handleChange} />
+                    </Form.Group>
+                    <Button variant="primary" type="submit">
+                        Add
+                     </Button>
+                    {this.props.currentUser}
+                </Form>
+
+
+
+            </div>
+        )
+    }
+}
+
+const mapStateToProps = state => ({
+    currentClientName: state.client.currentClientName,
+    currentClientId: state.client.currentClientId,
+    currentUser: state.user.currentUser
+})
+
+const mapDispatchToProps = dispatch => ({
+    setCurentClientName: client => dispatch(setCurentClientName(client)),
+    setCurentClientId: client => dispatch(setCurentClientId(client))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Addclient);
