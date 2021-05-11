@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from '../../axios';
-import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { Navbar, Nav, NavDropdown, Button } from 'react-bootstrap';
 import './navbar.styles.scss';
 import Cookies from 'universal-cookie';
+
+import { setCurentUser } from '../../redux/users/user.actions';
 
 class NavBar extends Component {
     constructor() {
@@ -27,6 +30,9 @@ class NavBar extends Component {
         ).then(() => {
             const cookies = new Cookies();
             cookies.remove('token');
+            this.props.setCurentUser(
+                null
+            )
             console.log('logout succesful')
         }).catch(() => {
             console.log('logout fail')
@@ -40,20 +46,26 @@ class NavBar extends Component {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="mr-auto">
-                        <Nav.Link href="/dashboard">Dashboard</Nav.Link>
-                        <Nav.Link href="/payments">Payments</Nav.Link>
+                        <Link to={'/dashboard'} className="nav-link">Dashboard</Link>
+                        <Link to={'/payments'} className="nav-link">Payments</Link>
+                        {/* <Link to="/courses?sort=name" /> */}
                         <NavDropdown title="Add" id="collasible-nav-dropdown">
-                            <NavDropdown.Item href="/addworker">Worker</NavDropdown.Item>
-                            <NavDropdown.Item href="/addclient">Client</NavDropdown.Item>
-                            <NavDropdown.Item href="/addjob">Job</NavDropdown.Item>
+                            <Link to={'/addworker'} className="dropdown-item">Worker</Link>
+                            <Link to={'/addclient'} className="dropdown-item">Client</Link>
+                            <Link to={'/addjob'} className="dropdown-item">Job</Link>
                         </NavDropdown>
                     </Nav>
                     <Nav>
                         <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
-                            <NavDropdown.Item href="/">login</NavDropdown.Item>
-                            <NavDropdown.Item href="/register">register</NavDropdown.Item>
-                            <NavDropdown.Item onClick={this.onClickButton}>logout</NavDropdown.Item>
-
+                            <Link to={'/'} className="dropdown-item">login</Link>
+                            <Link to={'/register'} className="dropdown-item">register</Link>
+                            {
+                                this.props.currentUser ? (
+                                    <NavDropdown.Item><Button variant="danger" onClick={this.onClickButton}>logout</Button></NavDropdown.Item>
+                                ) : (
+                                    null
+                                )
+                            }
                         </NavDropdown>
                     </Nav>
                 </Navbar.Collapse>
@@ -68,4 +80,8 @@ const mapStateToProps = state => ({
     currentUser: state.user.currentUser
 })
 
-export default connect(mapStateToProps)(NavBar)
+const mapDispatchToProps = dispatch => ({
+    setCurentUser: user => dispatch(setCurentUser(user))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar)

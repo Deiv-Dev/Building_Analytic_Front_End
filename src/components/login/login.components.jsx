@@ -21,14 +21,11 @@ class Login extends React.Component {
             password: this.state.password
         })
             .then(res => {
-                console.log(res.data.access_token);
                 this.props.setCurentUser(
-                    res.data.access_token
+                    res.data.user.name
                 )
                 const cookies = new Cookies();
                 cookies.set('token', `${res.data.access_token}`);
-                console.log(cookies.get('token')); // Pacman
-                // cookies.remove('token');
             })
             .catch(err => {
                 console.log(err);
@@ -38,18 +35,6 @@ class Login extends React.Component {
     render() {
 
         return (
-            // <div>
-            //     <form onSubmit={this.handleSubmit}>
-            //         <label>email</label>
-            //         <input type="text" name='email' onChange={this.handleChange}></input>
-
-            //         <label>password</label>
-            //         <input type="text" name='password' onChange={this.handleChange}></input>
-
-            //         <button type='submit'>submit</button>
-
-            //     </form>
-            // </div>
             <Form className='login_form' onSubmit={this.handleSubmit}>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
