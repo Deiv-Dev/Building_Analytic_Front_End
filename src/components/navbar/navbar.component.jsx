@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from '../../axios';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Navbar, Nav, NavDropdown, Button } from 'react-bootstrap';
 import './navbar.styles.scss';
 import Cookies from 'universal-cookie';
@@ -33,6 +33,8 @@ class NavBar extends Component {
             this.props.setCurentUser(
                 null
             )
+            // const history = useHistory();
+            // history.push('/register');
             console.log('logout succesful')
         }).catch(() => {
             console.log('logout fail')

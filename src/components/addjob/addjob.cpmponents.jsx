@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from '../../axios';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Table } from 'react-bootstrap';
 import { setCurentClientName, setCurentClientId, } from '../../redux/clients/client.actions';
+import { setCurentJob } from '../../redux/job/job.actions';
 import Cookies from 'universal-cookie';
 
 class Addclient extends Component {
@@ -28,6 +29,25 @@ class Addclient extends Component {
                     )
                     this.props.setCurentClientId(
                         element.id
+                    )
+                    // this.props.setCurentClient(currentClient => ({
+                    //     array: [...currentClient.array, element.name]
+                    // }))
+
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
+        axios.get(
+            '/alljobs',
+            config
+        )
+            .then(res => {
+                res.data.forEach(element => {
+                    this.props.setCurentJob(
+                        element.address
                     )
                     // this.props.setCurentClient(currentClient => ({
                     //     array: [...currentClient.array, element.name]
@@ -85,6 +105,12 @@ class Addclient extends Component {
                 id: this.props.currentClientId[i]
             });
         };
+        // const job = [];
+        // for (let i = 0; i < this.props.currentJob.length; i++) {
+        //     job.push({
+        //         description: this.props.currentJob[i],
+        //     });
+        // };
         console.log(client)
         return (
             <div className='center_form'>
@@ -118,7 +144,30 @@ class Addclient extends Component {
                      </Button>
                     {this.props.currentUser}
                 </Form>
-
+                <Table responsive="sm">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Table heading</th>
+                            <th>Table heading</th>
+                            <th>Table heading</th>
+                            <th>Table heading</th>
+                            <th>Table heading</th>
+                            <th>Table heading</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>3</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                        </tr>
+                    </tbody>
+                </Table>
 
 
             </div>
@@ -129,12 +178,14 @@ class Addclient extends Component {
 const mapStateToProps = state => ({
     currentClientName: state.client.currentClientName,
     currentClientId: state.client.currentClientId,
-    currentUser: state.user.currentUser
+    currentUser: state.user.currentUser,
+    currentJob: state.user.currentJob
 })
 
 const mapDispatchToProps = dispatch => ({
     setCurentClientName: client => dispatch(setCurentClientName(client)),
-    setCurentClientId: client => dispatch(setCurentClientId(client))
+    setCurentClientId: client => dispatch(setCurentClientId(client)),
+    setCurentJob: job => dispatch(setCurentJob(job))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Addclient);

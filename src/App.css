@@ -1,15 +1,12 @@
 form{
     width: 50%;
-    margin: 250px auto 0 auto;
+    margin: 200px auto 0 auto;
     padding: 10px;
     border-radius: 10px; 
     box-shadow: 5px 5px 20px 1px #000000;
 }
 
-html{
-    height: 100%;
-}
-
-svg{
-    top:100px;
+.table{
+    width: 80%;
+    margin: 50px auto;
 }
