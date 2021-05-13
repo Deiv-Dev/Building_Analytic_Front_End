@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from '../../axios';
 import { Form, Button, Table } from 'react-bootstrap';
-import { setCurentClientName, setCurentClientId, } from '../../redux/clients/client.actions';
-import { setCurentJob } from '../../redux/job/job.actions';
+import { setCurrentClientName, setCurrentClientId, } from '../../redux/clients/client.actions';
+import { setCurrentJobId, setCurrentJobAddress, setCcurrentJobDescription, setCurrentJobStart, setCurrentJobFinish } from '../../redux/job/job.actions';
 import Cookies from 'universal-cookie';
 
 class Addclient extends Component {
@@ -24,10 +24,10 @@ class Addclient extends Component {
         )
             .then(res => {
                 res.data.forEach(element => {
-                    this.props.setCurentClientName(
+                    this.props.setCurrentClientName(
                         element.name
                     )
-                    this.props.setCurentClientId(
+                    this.props.setCurrentClientId(
                         element.id
                     )
                     // this.props.setCurentClient(currentClient => ({
@@ -46,13 +46,24 @@ class Addclient extends Component {
         )
             .then(res => {
                 res.data.forEach(element => {
-                    this.props.setCurentJob(
+                    this.props.setCurrentJobId(
+                        element.id
+                    );
+                    this.props.setCurrentJobAddress(
                         element.address
-                    )
+                    );
+                    this.props.setCcurrentJobDescription(
+                        element.description
+                    );
+                    this.props.setCurrentJobStart(
+                        element.start
+                    );
+                    this.props.setCurrentJobFinish(
+                        element.finish
+                    );
                     // this.props.setCurentClient(currentClient => ({
                     //     array: [...currentClient.array, element.name]
                     // }))
-
                 });
             })
             .catch(err => {
@@ -97,21 +108,19 @@ class Addclient extends Component {
     }
 
     render() {
-        //const client = [this.props.currentClientName, this.props.currentClientId]
         const client = [];
-        for (let i = 0; i < this.props.currentClientName.length; i++) {
+        for (let i = 0; i < this.props.currentClientId.length; i++) {
             client.push({
-                name: this.props.currentClientName[i],
-                id: this.props.currentClientId[i]
+                id: this.props.currentClientId[i],
+                name: this.props.currentClientName[i]
             });
         };
-        // const job = [];
-        // for (let i = 0; i < this.props.currentJob.length; i++) {
-        //     job.push({
-        //         description: this.props.currentJob[i],
-        //     });
-        // };
-        console.log(client)
+        const job = [];
+        for (let i = 0; i < this.props.currentJobId.length; i++) {
+            client.push({
+                id: this.props.currentJobId[i],
+            });
+        };
         return (
             <div className='center_form'>
                 <Form className='login_form' onSubmit={this.handleSubmit}>
@@ -147,6 +156,9 @@ class Addclient extends Component {
                 <Table responsive="sm">
                     <thead>
                         <tr>
+                            {job.map((job) => (
+                                <option key={job.id} value={job.id}>{job.id}</option>
+                            ))}
                             <th>#</th>
                             <th>Table heading</th>
                             <th>Table heading</th>
@@ -178,14 +190,22 @@ class Addclient extends Component {
 const mapStateToProps = state => ({
     currentClientName: state.client.currentClientName,
     currentClientId: state.client.currentClientId,
-    currentUser: state.user.currentUser,
-    currentJob: state.user.currentJob
+    currentUser: state.user.currentUserId,
+    currentJobId: state.job.currentJobId,
+    currentJobAddress: state.job.currentJobAddress,
+    currentJobDescription: state.job.currentJobDescription,
+    currentJobStart: state.job.currentJobStart,
+    currentJobFinish: state.job.currentJobFinish
 })
 
 const mapDispatchToProps = dispatch => ({
-    setCurentClientName: client => dispatch(setCurentClientName(client)),
-    setCurentClientId: client => dispatch(setCurentClientId(client)),
-    setCurentJob: job => dispatch(setCurentJob(job))
+    setCurrentClientName: client => dispatch(setCurrentClientName(client)),
+    setCurrentClientId: client => dispatch(setCurrentClientId(client)),
+    setCurrentJobId: job => dispatch(setCurrentJobId(job)),
+    setCurrentJobAddress: job => dispatch(setCurrentJobAddress(job)),
+    setCcurrentJobDescription: job => dispatch(setCcurrentJobDescription(job)),
+    setCurrentJobStart: job => dispatch(setCurrentJobStart(job)),
+    setCurrentJobFinish: job => dispatch(setCurrentJobFinish(job))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Addclient);
