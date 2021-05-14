@@ -18,6 +18,7 @@ class Addclient extends Component {
             }
         };
 
+
         axios.get(
             '/allclients',
             config
@@ -39,6 +40,8 @@ class Addclient extends Component {
             .catch(err => {
                 console.log(err);
             })
+
+
 
         axios.get(
             '/alljobs',
@@ -109,16 +112,20 @@ class Addclient extends Component {
 
     render() {
         const client = [];
-        for (let i = 0; i < this.props.currentClientId.length; i++) {
+        for (let i = 0; i < this.props.currentClientName.length; i++) {
             client.push({
                 id: this.props.currentClientId[i],
                 name: this.props.currentClientName[i]
             });
         };
         const job = [];
-        for (let i = 0; i < this.props.currentJobId.length; i++) {
-            client.push({
+        for (let i = 0; i < this.props.currentJobAddress.length; i++) {
+            job.push({
                 id: this.props.currentJobId[i],
+                address: this.props.currentJobAddress[i],
+                description: this.props.currentJobDescription[i],
+                start: this.props.currentJobStart[i],
+                finish: this.props.currentJobFinish[i],
             });
         };
         return (
@@ -136,7 +143,7 @@ class Addclient extends Component {
                         <Form.Label>Sellect client</Form.Label>
                         <Form.Control as="select" name="client_id" onChange={this.handleChange}>
                             {client.map((client) => (
-                                <option key={client.id} value={client.id}>{client.name}</option>
+                                <option key={`client${client.id}`} value={client.id}>{client.name}</option>
                             ))}
                         </Form.Control>
                     </Form.Group>
@@ -156,33 +163,31 @@ class Addclient extends Component {
                 <Table responsive="sm">
                     <thead>
                         <tr>
-                            {job.map((job) => (
-                                <option key={job.id} value={job.id}>{job.id}</option>
-                            ))}
-                            <th>#</th>
-                            <th>Table heading</th>
-                            <th>Table heading</th>
-                            <th>Table heading</th>
-                            <th>Table heading</th>
-                            <th>Table heading</th>
-                            <th>Table heading</th>
+                            <th>Address</th>
+                            <th>Description</th>
+                            <th>Job start</th>
+                            <th>Job prediction to finish</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>3</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
+                        {job.map((job) => (
+
+                            <tr key={`job${job.id}`}>
+
+                                <td key={`address${job.id}`}>{job.address}</td>
+                                <td key={`description${job.id}`}>{job.description}</td>
+                                <td key={`start${job.id}`}>{job.start}</td>
+                                <td key={`finish${job.id}`}>{job.finish}</td>
+
+
+                            </tr>
+                        ))}
+
                     </tbody>
                 </Table>
 
 
-            </div>
+            </div >
         )
     }
 }
