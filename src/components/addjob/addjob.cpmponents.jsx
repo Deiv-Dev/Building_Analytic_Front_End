@@ -18,60 +18,61 @@ class Addclient extends Component {
             }
         };
 
+        if (this.props.currentClientId >= 0) {
+            axios.get(
+                '/allclients',
+                config
+            )
+                .then(res => {
+                    res.data.forEach(element => {
+                        this.props.setCurrentClientName(
+                            element.name
+                        )
+                        this.props.setCurrentClientId(
+                            element.id
+                        )
+                        // this.props.setCurentClient(currentClient => ({
+                        //     array: [...currentClient.array, element.name]
+                        // }))
 
-        axios.get(
-            '/allclients',
-            config
-        )
-            .then(res => {
-                res.data.forEach(element => {
-                    this.props.setCurrentClientName(
-                        element.name
-                    )
-                    this.props.setCurrentClientId(
-                        element.id
-                    )
-                    // this.props.setCurentClient(currentClient => ({
-                    //     array: [...currentClient.array, element.name]
-                    // }))
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
 
-                });
-            })
-            .catch(err => {
-                console.log(err);
-            })
-
-
-
-        axios.get(
-            '/alljobs',
-            config
-        )
-            .then(res => {
-                res.data.forEach(element => {
-                    this.props.setCurrentJobId(
-                        element.id
-                    );
-                    this.props.setCurrentJobAddress(
-                        element.address
-                    );
-                    this.props.setCcurrentJobDescription(
-                        element.description
-                    );
-                    this.props.setCurrentJobStart(
-                        element.start
-                    );
-                    this.props.setCurrentJobFinish(
-                        element.finish
-                    );
-                    // this.props.setCurentClient(currentClient => ({
-                    //     array: [...currentClient.array, element.name]
-                    // }))
-                });
-            })
-            .catch(err => {
-                console.log(err);
-            })
+        if (this.props.currentJobId >= 0) {
+            axios.get(
+                '/alljobs',
+                config
+            )
+                .then(res => {
+                    res.data.forEach(element => {
+                        this.props.setCurrentJobId(
+                            element.id
+                        );
+                        this.props.setCurrentJobAddress(
+                            element.address
+                        );
+                        this.props.setCcurrentJobDescription(
+                            element.description
+                        );
+                        this.props.setCurrentJobStart(
+                            element.start
+                        );
+                        this.props.setCurrentJobFinish(
+                            element.finish
+                        );
+                        // this.props.setCurentClient(currentClient => ({
+                        //     array: [...currentClient.array, element.name]
+                        // }))
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
     }
 
     handleChange = event => {
