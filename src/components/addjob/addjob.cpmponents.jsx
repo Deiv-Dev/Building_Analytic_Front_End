@@ -172,18 +172,13 @@ class Addclient extends Component {
                     </thead>
                     <tbody>
                         {job.map((job) => (
-
                             <tr key={`job${job.id}`}>
-
                                 <td key={`address${job.id}`}>{job.address}</td>
                                 <td key={`description${job.id}`}>{job.description}</td>
                                 <td key={`start${job.id}`}>{job.start}</td>
                                 <td key={`finish${job.id}`}>{job.finish}</td>
-
-
                             </tr>
                         ))}
-
                     </tbody>
                 </Table>
 

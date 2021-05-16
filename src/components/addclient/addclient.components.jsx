@@ -5,6 +5,37 @@ import { Form, Button, Table } from 'react-bootstrap';
 import Cookies from 'universal-cookie';
 
 class Addclient extends Component {
+    componentDidMount() {
+        const cookies = new Cookies();
+        const token = cookies.get('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        };
+
+        if (this.props.currentClientId >= 0) {
+            axios.get(
+                '/allclients',
+                config
+            )
+                .then(res => {
+                    res.data.forEach(element => {
+                        this.props.setCurrentClientName(
+                            element.name
+                        )
+                        this.props.setCurrentClientId(
+                            element.id
+                        )
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+    }
+
     handleChange = event => {
         this.setState({ [event.target.name]: event.target.value });
     }
@@ -37,7 +68,14 @@ class Addclient extends Component {
             })
     }
 
-    render(currentUser) {
+    render() {
+        const client = [];
+        for (let i = 0; i < this.props.currentClientName.length; i++) {
+            client.push({
+                id: this.props.currentClientId[i],
+                name: this.props.currentClientName[i]
+            });
+        };
         return (
             <div>
                 <Form className='login_form' onSubmit={this.handleSubmit}>
@@ -50,27 +88,12 @@ class Addclient extends Component {
                      </Button>
                 </Form>
                 <Table responsive="sm">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Table heading</th>
-                            <th>Table heading</th>
-                            <th>Table heading</th>
-                            <th>Table heading</th>
-                            <th>Table heading</th>
-                            <th>Table heading</th>
-                        </tr>
-                    </thead>
                     <tbody>
-                        <tr>
-                            <td>3</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
+                        {job.map((client) => (
+                            <tr key={`client${client.id}`}>
+                                <td key={`client${client.name}`}>{client.name}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </Table>
             </div>
@@ -79,7 +102,9 @@ class Addclient extends Component {
 }
 
 const mapStateToProps = state => ({
-    currentUser: state.user.currentUser
+    currentUser: state.user.currentUser,
+    currentClientName: state.client.currentClientName,
+    currentClientId: state.client.currentClientId
 })
 
 export default connect(mapStateToProps)(Addclient);
