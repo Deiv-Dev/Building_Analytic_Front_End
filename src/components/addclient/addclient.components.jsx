@@ -88,8 +88,13 @@ class Addclient extends Component {
                      </Button>
                 </Form>
                 <Table responsive="sm">
+                    <thead>
+                        <tr>
+                            <th>Client List</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                        {job.map((client) => (
+                        {client.map((client) => (
                             <tr key={`client${client.id}`}>
                                 <td key={`client${client.name}`}>{client.name}</td>
                             </tr>

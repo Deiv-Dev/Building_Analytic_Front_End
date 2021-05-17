@@ -4,8 +4,39 @@ import './addworker.styles.scss';
 import axios from '../../axios';
 import { Form, Button, Table } from 'react-bootstrap';
 import Cookies from 'universal-cookie';
+import { setCurrentWorkerName, setCurrentWorkerId } from '../../redux/worker/worker.actions';
 
 class Addworker extends Component {
+    componentDidMount() {
+        const cookies = new Cookies();
+        const token = cookies.get('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        };
+
+        if (this.props.currentWorkerId >= 0) {
+            axios.get(
+                '/allworkers',
+                config
+            )
+                .then(res => {
+                    res.data.forEach(element => {
+                        this.props.setCurrentWorkerName(
+                            element.name
+                        )
+                        this.props.setCurrentWorkerId(
+                            element.id
+                        )
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+    }
     handleChange = event => {
         this.setState({ [event.target.name]: event.target.value });
     }
@@ -39,6 +70,14 @@ class Addworker extends Component {
     }
 
     render() {
+        const worker = [];
+        for (let i = 0; i < this.props.currentWorkerName.length; i++) {
+            worker.push({
+                id: this.props.currentWorkerId[i],
+                name: this.props.currentWorkerName[i]
+            });
+        };
+        console.log(worker);
         return (
             <div>
                 <Form className='login_form' onSubmit={this.handleSubmit}>
@@ -53,25 +92,15 @@ class Addworker extends Component {
                 <Table responsive="sm">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Table heading</th>
-                            <th>Table heading</th>
-                            <th>Table heading</th>
-                            <th>Table heading</th>
-                            <th>Table heading</th>
-                            <th>Table heading</th>
+                            <th>Workers list</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>3</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                            <td>Table cell</td>
-                        </tr>
+                        {worker.map((worker) => (
+                            <tr key={`worker${worker.id}`}>
+                                <td key={`workername${worker.id}`}>{worker.name}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </Table>
             </div>
@@ -80,7 +109,13 @@ class Addworker extends Component {
 }
 
 const mapStateToProps = state => ({
-    currentUser: state.user.currentUser
+    currentWorkerName: state.worker.currentWorkerName,
+    currentWorkerId: state.worker.currentWorkerId
 })
 
-export default connect(mapStateToProps)(Addworker);
+const mapDispatchToProps = dispatch => ({
+    setCurrentWorkerName: worker => dispatch(setCurrentWorkerName(worker)),
+    setCurrentWorkerId: worker => dispatch(setCurrentWorkerId(worker)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Addworker);

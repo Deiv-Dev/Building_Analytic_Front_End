@@ -1,0 +1,4 @@
+export const WorkerActionTypes = {
+    SET_CURRENT_WORKER_ID: 'SET_CURENT_WORKER_ID',
+    SET_CURRENT_WORKER_NAME: 'SET_CURRENT_WORKER_NAME',
+}

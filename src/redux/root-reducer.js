@@ -5,9 +5,11 @@ import { combineReducers } from 'redux';
 import userReducer from './users/user.reducer';
 import clientReducer from './clients/client.reducer';
 import jobReducer from './job/job.reducer';
+import workerReducer from './worker/worker.reducer';
 
 export default combineReducers({
     user: userReducer,
     client: clientReducer,
-    job: jobReducer
+    job: jobReducer,
+    worker: workerReducer
 });
