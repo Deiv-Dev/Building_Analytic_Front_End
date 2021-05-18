@@ -50,7 +50,7 @@ class Workerpayments extends Component {
         };
 
         axios.post(
-            '/workerpayments',
+            '/worker_payments',
             bodyParameters,
             config
         )
@@ -62,7 +62,27 @@ class Workerpayments extends Component {
             })
     }
 
-    render(currentUser) {
+    onClickButton = (id) => {
+        const cookies = new Cookies();
+        const token = cookies.get('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        };
+        console.log(config);
+        axios.delete(
+            `/payment_delete/${id}`,
+            config
+        ).then(() => {
+            console.log('worker deleted')
+        }).catch(() => {
+            console.log('delete fail')
+        })
+    }
+
+    render() {
         return (
             <div>
                 <Form className='login_form' onSubmit={this.handleSubmit}>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from '../../axios';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Navbar, Nav, NavDropdown, Button } from 'react-bootstrap';
 import './navbar.styles.scss';
 import Cookies from 'universal-cookie';
@@ -52,9 +52,9 @@ class NavBar extends Component {
                         <Link to={'/payments'} className="nav-link">Payments</Link>
                         {/* <Link to="/courses?sort=name" /> */}
                         <NavDropdown title="Add" id="collasible-nav-dropdown">
-                            <Link to={'/addworker'} className="dropdown-item">Worker</Link>
-                            <Link to={'/addclient'} className="dropdown-item">Client</Link>
-                            <Link to={'/addjob'} className="dropdown-item">Job</Link>
+                            <Link to={'/add_worker'} className="dropdown-item">Worker</Link>
+                            <Link to={'/add_client'} className="dropdown-item">Client</Link>
+                            <Link to={'/add_job'} className="dropdown-item">Job</Link>
                         </NavDropdown>
                     </Nav>
                     <Nav>

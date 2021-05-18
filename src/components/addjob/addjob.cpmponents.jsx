@@ -7,6 +7,11 @@ import { setCurrentJobId, setCurrentJobAddress, setCcurrentJobDescription, setCu
 import Cookies from 'universal-cookie';
 
 class Addclient extends Component {
+    constructor() {
+        super();
+        this.onClickButton = this.onClickButton.bind(this);
+    }
+
     // axios
     componentDidMount() {
         const cookies = new Cookies();
@@ -20,7 +25,7 @@ class Addclient extends Component {
 
         if (this.props.currentClientId >= 0) {
             axios.get(
-                '/allclients',
+                '/all_clients',
                 config
             )
                 .then(res => {
@@ -44,7 +49,7 @@ class Addclient extends Component {
 
         if (this.props.currentJobId >= 0) {
             axios.get(
-                '/alljobs',
+                '/all_jobs',
                 config
             )
                 .then(res => {
@@ -109,6 +114,26 @@ class Addclient extends Component {
             .catch(err => {
                 console.log(err);
             })
+    }
+
+    onClickButton = (id) => {
+        const cookies = new Cookies();
+        const token = cookies.get('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        };
+        console.log(config);
+        axios.delete(
+            `/job_delete/${id}`,
+            config
+        ).then(() => {
+            console.log('job deleted')
+        }).catch(() => {
+            console.log('delete fail')
+        })
     }
 
     render() {
@@ -177,6 +202,7 @@ class Addclient extends Component {
                                 <td key={`description${job.id}`}>{job.description}</td>
                                 <td key={`start${job.id}`}>{job.start}</td>
                                 <td key={`finish${job.id}`}>{job.finish}</td>
+                                <td><Button variant="danger" onClick={this.onClickButton.bind(this, job.id)}>Delete</Button></td>
                             </tr>
                         ))}
                     </tbody>

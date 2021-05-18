@@ -17,7 +17,7 @@ class Addclient extends Component {
 
         if (this.props.currentClientId >= 0) {
             axios.get(
-                '/allclients',
+                '/all_clients',
                 config
             )
                 .then(res => {
@@ -68,6 +68,26 @@ class Addclient extends Component {
             })
     }
 
+    onClickButton = (id) => {
+        const cookies = new Cookies();
+        const token = cookies.get('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        };
+        console.log(config);
+        axios.delete(
+            `/client_delete/${id}`,
+            config
+        ).then(() => {
+            console.log('client deleted')
+        }).catch(() => {
+            console.log('delete fail')
+        })
+    }
+
     render() {
         const client = [];
         for (let i = 0; i < this.props.currentClientName.length; i++) {
@@ -97,6 +117,7 @@ class Addclient extends Component {
                         {client.map((client) => (
                             <tr key={`client${client.id}`}>
                                 <td key={`client${client.name}`}>{client.name}</td>
+                                <td><Button variant="danger" onClick={this.onClickButton.bind(this, client.id)}>Delete</Button></td>
                             </tr>
                         ))}
                     </tbody>

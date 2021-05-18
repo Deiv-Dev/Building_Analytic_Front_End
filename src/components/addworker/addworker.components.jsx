@@ -19,7 +19,7 @@ class Addworker extends Component {
 
         if (this.props.currentWorkerId >= 0) {
             axios.get(
-                '/allworkers',
+                '/all_workers',
                 config
             )
                 .then(res => {
@@ -69,6 +69,26 @@ class Addworker extends Component {
             })
     }
 
+    onClickButton = (id) => {
+        const cookies = new Cookies();
+        const token = cookies.get('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        };
+        console.log(config);
+        axios.delete(
+            `/worker_delete/${id}`,
+            config
+        ).then(() => {
+            console.log('worker deleted')
+        }).catch(() => {
+            console.log('delete fail')
+        })
+    }
+
     render() {
         const worker = [];
         for (let i = 0; i < this.props.currentWorkerName.length; i++) {
@@ -99,6 +119,7 @@ class Addworker extends Component {
                         {worker.map((worker) => (
                             <tr key={`worker${worker.id}`}>
                                 <td key={`workername${worker.id}`}>{worker.name}</td>
+                                <td><Button variant="danger" onClick={this.onClickButton.bind(this, worker.id)}>Delete</Button></td>
                             </tr>
                         ))}
                     </tbody>
