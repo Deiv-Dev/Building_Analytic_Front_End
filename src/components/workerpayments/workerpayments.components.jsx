@@ -71,7 +71,6 @@ class Workerpayments extends Component {
                 'Content-Type': 'application/json',
             }
         };
-        console.log(config);
         axios.delete(
             `/payment_delete/${id}`,
             config

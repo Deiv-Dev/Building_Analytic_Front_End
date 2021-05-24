@@ -125,7 +125,6 @@ class Addclient extends Component {
                 'Content-Type': 'application/json',
             }
         };
-        console.log(config);
         axios.delete(
             `/job_delete/${id}`,
             config

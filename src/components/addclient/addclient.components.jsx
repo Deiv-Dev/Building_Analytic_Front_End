@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import axios from '../../axios';
 import { Form, Button, Table } from 'react-bootstrap';
 import Cookies from 'universal-cookie';
+import { setCurrentClientName, setCurrentClientId } from '../../redux/clients/client.actions';
 
 class Addclient extends Component {
     componentDidMount() {
@@ -24,10 +25,10 @@ class Addclient extends Component {
                     res.data.forEach(element => {
                         this.props.setCurrentClientName(
                             element.name
-                        )
+                        );
                         this.props.setCurrentClientId(
                             element.id
-                        )
+                        );
                     });
                 })
                 .catch(err => {
@@ -127,10 +128,15 @@ class Addclient extends Component {
     }
 }
 
+const mapDispatchToProps = dispatch => ({
+    setCurrentClientName: client => dispatch(setCurrentClientName(client)),
+    setCurrentClientId: client => dispatch(setCurrentClientId(client))
+})
+
 const mapStateToProps = state => ({
     currentUser: state.user.currentUser,
     currentClientName: state.client.currentClientName,
     currentClientId: state.client.currentClientId
 })
 
-export default connect(mapStateToProps)(Addclient);
+export default connect(mapStateToProps, mapDispatchToProps)(Addclient);
